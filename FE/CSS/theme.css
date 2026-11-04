@@ -1,3 +1,6 @@
+body{
+  user-select:none;
+}
 /* =====================================================================
    OFFBEAT — design tokens
    ===================================================================== */
@@ -49,9 +52,11 @@ section{position:relative}
 .cur-dot,.cur-ring{position:fixed;top:0;left:0;z-index:300;pointer-events:none;opacity:0;border-radius:50%}
 .cur-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--hot)}
 .cur-ring{width:46px;height:46px;margin:-23px 0 0 -23px;border:1px solid rgba(236,231,221,.5);display:grid;place-items:center;transition:background .3s,border-color .3s}
-.cur-label{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#0b0a09;opacity:0}
+.cur-label{font-family:var(--f-serif);font-size:12px;font-style:italic;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:#0b0a09;opacity:0;transition:color .3s}
 .cur-ring.on{background:var(--hot);border-color:var(--hot)}
 .cur-ring.on .cur-label{opacity:1}
+.cur-ring.on-pass{background:var(--ink);border-color:var(--ink)}
+.cur-ring.on-pass .cur-label{color:var(--hot)}
 html.has-cursor,html.has-cursor a,html.has-cursor button,html.has-cursor [data-cursor]{cursor:none}
 html.has-cursor input,html.has-cursor select,html.has-cursor label{cursor:auto}
 

@@ -133,8 +133,9 @@ function initCursor(){
   if(coarse||reduce) return;
   document.documentElement.classList.add('has-cursor');
   const dot=$('.cur-dot'), ring=$('.cur-ring'), label=$('.cur-label');
-  const dx=gsap.quickTo(dot,'x',{duration:.12,ease:'power3'}), dy=gsap.quickTo(dot,'y',{duration:.12,ease:'power3'});
-  const rx=gsap.quickTo(ring,'x',{duration:.55,ease:'power3'}), ry=gsap.quickTo(ring,'y',{duration:.55,ease:'power3'});
+  const dx=gsap.quickTo(dot,'x',{duration:.1,ease:'power3'}), dy=gsap.quickTo(dot,'y',{duration:.1,ease:'power3'});
+  const rx=gsap.quickTo(ring,'x',{duration:.38,ease:'power2.out'}), ry=gsap.quickTo(ring,'y',{duration:.38,ease:'power2.out'});
+  const hoverEase='back.out(1.35)';
   let shown=false;
   addEventListener('pointermove',e=>{
     if(!shown){shown=true;gsap.set([dot,ring],{x:e.clientX,y:e.clientY});gsap.to([dot,ring],{opacity:1,duration:.4});}
@@ -142,19 +143,20 @@ function initCursor(){
   });
   document.addEventListener('pointerover',e=>{
     const t=e.target.closest('[data-cursor]');
-    if(t){label.textContent=t.dataset.cursor;ring.classList.add('on');gsap.to(ring,{scale:2.1,duration:.5,ease:'offbeat'});gsap.to(dot,{scale:0,duration:.3});}
+    ring.classList.toggle('on-pass',Boolean(t&&t.closest('.pass')));
+    if(t){label.textContent=t.dataset.cursor;ring.classList.add('on');gsap.to(ring,{scale:2.1,duration:.7,ease:hoverEase,overwrite:'auto'});gsap.to(dot,{scale:0,duration:.3});}
     else if(e.target.closest('a,button')){gsap.to(ring,{scale:1.5,duration:.4,ease:'offbeat'});}
   });
   document.addEventListener('pointerout',e=>{
     const t=e.relatedTarget;
-    if(!t||!t.closest||!t.closest('[data-cursor],a,button')){ring.classList.remove('on');gsap.to(ring,{scale:1,duration:.5,ease:'offbeat'});gsap.to(dot,{scale:1,duration:.3});}
+    if(!t||!t.closest||!t.closest('[data-cursor],a,button')){ring.classList.remove('on','on-pass');gsap.to(ring,{scale:1,duration:.7,ease:hoverEase,overwrite:'auto'});gsap.to(dot,{scale:1,duration:.3});}
   });
 }
 function initMagnetic(){
   if(coarse||reduce) return;
   $$('.magnetic').forEach(el=>{
-    const xTo=gsap.quickTo(el,'x',{duration:.6,ease:'power3'}), yTo=gsap.quickTo(el,'y',{duration:.6,ease:'power3'});
-    el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();xTo((e.clientX-r.left-r.width/2)*.32);yTo((e.clientY-r.top-r.height/2)*.32);});
+    const xTo=gsap.quickTo(el,'x',{duration:.42,ease:'power2.out'}), yTo=gsap.quickTo(el,'y',{duration:.42,ease:'power2.out'});
+    el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();xTo((e.clientX-r.left-r.width/2)*.36);yTo((e.clientY-r.top-r.height/2)*.36);});
     el.addEventListener('pointerleave',()=>{gsap.to(el,{x:0,y:0,duration:1,ease:'elastic.out(1,.4)',overwrite:true});});
   });
 }
