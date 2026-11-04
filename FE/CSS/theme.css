@@ -105,7 +105,7 @@ html.has-cursor input,html.has-cursor select,html.has-cursor label{cursor:auto}
 .mq-grp i{width:.5em;height:.5em;border-radius:50%;background:var(--hot);flex:none;font-size:clamp(34px,6vw,96px)}
 
 /* Manifesto */
-.manifesto{padding-block:clamp(110px,16vw,240px)}
+.manifesto{padding-block:clamp(110px,16vw,240px);overflow:hidden}
 .manifesto-text{font-size:clamp(30px,5.2vw,88px);line-height:1.06;letter-spacing:-.035em;font-weight:600;max-width:17em}
 .manifesto-text em{font-family:var(--f-serif);font-weight:400;letter-spacing:-.02em;color:var(--hot)}
 .orb{position:absolute;right:-8vw;top:10%;width:34vw;aspect-ratio:1;border:1px solid var(--line);border-radius:50%;pointer-events:none}
