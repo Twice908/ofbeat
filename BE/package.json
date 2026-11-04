@@ -1,0 +1,22 @@
+{
+  "name": "dance-competition-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "node scripts/wrangler.mjs deploy",
+    "db:migrate:local": "wrangler d1 migrations apply dance-competition-db --local",
+    "db:migrate:remote": "node scripts/wrangler.mjs d1 migrations apply dance-competition-db --remote",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p test/tsconfig.json",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.4.3",
+    "@types/node": "^26.6.6",
+    "typescript": "^5.5.2",
+    "vitest": "~5.0.3",
+    "wrangler": "^4.157.0"
+  }
+}
