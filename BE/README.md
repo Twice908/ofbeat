@@ -31,7 +31,11 @@ Confirmation emails are queued in D1 when a registration becomes paid. The Worke
 1. Create a Cloudflare account and create a D1 database named `dance-competition-db`.
 2. Copy the D1 database ID. Set it as the GitHub Actions repository variable `CLOUDFLARE_D1_DATABASE_ID` for CI deployment. For local manual deployment, export the same variable in your shell.
 3. Create a Cloudflare API token with permission to deploy Workers and manage the account's D1 databases. Save it as the GitHub Actions secret `CLOUDFLARE_API_TOKEN`; save the Cloudflare account ID as `CLOUDFLARE_ACCOUNT_ID`.
-4. Add the GitHub Actions repository variable `ALLOWED_ORIGINS` with comma-separated exact frontend origins. For this GitHub Pages project, use `https://twice908.github.io`; do not include the repository path or a trailing slash. Add `RESEND_FROM_EMAIL` only after configuring Resend and verifying a sender domain.
+4. In GitHub **Settings → Secrets and variables → Actions**, add:
+   - `CLOUDFLARE_D1_DATABASE_ID`: use either a repository secret or variable.
+   - `ALLOWED_ORIGINS`: use either a repository secret or variable; for GitHub Pages, set `https://twice908.github.io` (no repository path or trailing slash).
+   - `RESEND_FROM_EMAIL`: optional; add as a variable only after configuring Resend and verifying a sender domain.
+   The workflow checks secrets first, then variables, and defaults `ALLOWED_ORIGINS` to `https://twice908.github.io`.
 5. Push the workflow to GitHub or run it from the repository's **Actions** tab. Its first deployment applies the migration and creates the Worker.
 6. In **Workers & Pages → dance-competition-api → Settings → Variables and Secrets**, add these as encrypted secrets when you configure payments and email:
    - `RAZORPAY_KEY_ID`
