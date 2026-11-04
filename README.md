@@ -32,7 +32,7 @@ The amounts in the frontend are for display only. The backend must independently
 1. In GitHub repository **Settings → Pages**, choose **GitHub Actions** as the source.
 2. The workflow defaults `FE_API_BASE_URL` to the current deployed Worker origin; optionally set the repository Actions variable `FE_API_BASE_URL` to override it. `FE_RAZORPAY_KEY_ID` is optional until Razorpay is configured.
 3. Push to `main` or run **Deploy frontend** from **Actions**. The workflow generates the ignored config and publishes `FE/`.
-4. The page will be at `<site-url>/FE/HTML/`.
+4. The root `<site-url>/` redirects to the app at `<site-url>/FE/HTML/`.
 5. Add the exact GitHub Pages origin to the Cloudflare Worker `ALLOWED_ORIGINS` variable. Also allow your custom domain if used.
 
 The site uses CDN-hosted GSAP, ScrollTrigger, Lenis, Razorpay Checkout and Google Fonts. Internet access is required for those assets. For production, pin and review dependency versions.
