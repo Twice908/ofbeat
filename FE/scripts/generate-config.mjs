@@ -47,9 +47,9 @@ const razorpayKeyId = (
 	""
 ).trim();
 
-if (required && (!apiBaseUrl || !razorpayKeyId)) {
+if (required && !apiBaseUrl) {
 	throw new Error(
-		"FE_API_BASE_URL and FE_RAZORPAY_KEY_ID must be set in the environment or FE/.env.",
+		"FE_API_BASE_URL must be set in the environment or FE/.env. FE_RAZORPAY_KEY_ID is optional until Razorpay is configured.",
 	);
 }
 

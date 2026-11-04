@@ -15,9 +15,9 @@ if (needsRemoteDatabase) {
 	const databaseId = process.env.CLOUDFLARE_D1_DATABASE_ID?.trim();
 	const allowedOrigins = process.env.ALLOWED_ORIGINS?.trim();
 	const sender = process.env.RESEND_FROM_EMAIL?.trim();
-	if (!databaseId || !allowedOrigins || !sender) {
+	if (!databaseId || !allowedOrigins) {
 		throw new Error(
-			"Set CLOUDFLARE_D1_DATABASE_ID, ALLOWED_ORIGINS, and RESEND_FROM_EMAIL before deploying or applying remote migrations.",
+			"Set CLOUDFLARE_D1_DATABASE_ID and ALLOWED_ORIGINS before deploying or applying remote migrations.",
 		);
 	}
 	for (const origin of allowedOrigins.split(",").map((value) => value.trim())) {
@@ -38,7 +38,7 @@ if (needsRemoteDatabase) {
 	config.d1_databases[0].database_id = databaseId;
 	config.vars = {
 		ALLOWED_ORIGINS: allowedOrigins,
-		RESEND_FROM_EMAIL: sender,
+		...(sender ? { RESEND_FROM_EMAIL: sender } : {}),
 	};
 	await writeFile(generatedConfig, `${JSON.stringify(config, null, 2)}\n`, {
 		mode: 0o600,

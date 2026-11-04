@@ -31,27 +31,25 @@ Confirmation emails are queued in D1 when a registration becomes paid. The Worke
 1. Create a Cloudflare account and create a D1 database named `dance-competition-db`.
 2. Copy the D1 database ID. Set it as the GitHub Actions repository variable `CLOUDFLARE_D1_DATABASE_ID` for CI deployment. For local manual deployment, export the same variable in your shell.
 3. Create a Cloudflare API token with permission to deploy Workers and manage the account's D1 databases. Save it as the GitHub Actions secret `CLOUDFLARE_API_TOKEN`; save the Cloudflare account ID as `CLOUDFLARE_ACCOUNT_ID`.
-4. Add GitHub Actions repository variables:
-   - `ALLOWED_ORIGINS`: comma-separated exact frontend origins. Use the origin shown by GitHub Pages or your custom domain; do not include paths or a trailing slash.
-   - `RESEND_FROM_EMAIL`: sender address on a domain verified with Resend.
+4. Add the GitHub Actions repository variable `ALLOWED_ORIGINS` with comma-separated exact frontend origins. For this GitHub Pages project, use `https://twice908.github.io`; do not include the repository path or a trailing slash. Add `RESEND_FROM_EMAIL` only after configuring Resend and verifying a sender domain.
 5. Push the workflow to GitHub or run it from the repository's **Actions** tab. Its first deployment applies the migration and creates the Worker.
-6. In **Workers & Pages → dance-competition-api → Settings → Variables and Secrets**, add these as encrypted secrets:
+6. In **Workers & Pages → dance-competition-api → Settings → Variables and Secrets**, add these as encrypted secrets when you configure payments and email:
    - `RAZORPAY_KEY_ID`
    - `RAZORPAY_KEY_SECRET`
    - `RAZORPAY_WEBHOOK_SECRET`
    - `RESEND_API_KEY`
-7. In Razorpay Dashboard, create a webhook using the Worker URL shown in Cloudflare, followed by `/api/payments/webhook`. Subscribe to `payment.captured`, `payment.failed`, and `order.paid`. Use the same webhook secret in the Worker secret.
-8. Set the frontend GitHub Actions variables `FE_API_BASE_URL` and `FE_RAZORPAY_KEY_ID` as described in the root README. Use Razorpay Test Mode and a verified Resend sender to test the full flow before switching to live payments.
+7. Once Razorpay is configured, create a webhook using the Worker URL shown in Cloudflare, followed by `/api/payments/webhook`. Subscribe to `payment.captured`, `payment.failed`, and `order.paid`. Use the same webhook secret in the Worker secret.
+8. Set `FE_API_BASE_URL` to the Worker origin in GitHub Actions. `FE_RAZORPAY_KEY_ID` can remain unset until Razorpay is configured. Without Razorpay credentials, `/api/health` works, but creating payment orders and verifying payments returns a service-not-configured response.
 
 The API permits only exact origins listed in `ALLOWED_ORIGINS`. Requests without an `Origin` header are allowed for server-to-server use. The webhook is authenticated by Razorpay's signature, not CORS.
 
 ## GitHub Actions deployment
 
-The workflow at `.github/workflows/deploy-backend.yml` runs type-checks and tests, applies D1 migrations remotely, then deploys the Worker when backend files change on `main`. It can also be started manually from the repository's **Actions** tab.
+The workflow at `.github/workflows/deploy-backend.yml` runs type-checks and tests, applies D1 migrations remotely, then deploys the Worker when backend files change on `main`. It can also be started manually from the repository's **Actions** tab. Resend and Razorpay credentials are not required to deploy; the API health response reports unconfigured integrations as degraded.
 
 The D1 ID is inserted into a temporary Wrangler configuration at deploy time; no fake account-specific ID is committed. Secrets stay in Cloudflare and are not passed through the build or written into the repository.
 
-For manual deployment after authenticating Wrangler, set `CLOUDFLARE_D1_DATABASE_ID`, `ALLOWED_ORIGINS`, and `RESEND_FROM_EMAIL`, then run:
+For manual deployment after authenticating Wrangler, set `CLOUDFLARE_D1_DATABASE_ID` and `ALLOWED_ORIGINS`. `RESEND_FROM_EMAIL` is optional until email is configured. Then run:
 
 ```bash
 npm run db:migrate:remote
