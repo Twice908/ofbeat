@@ -37,7 +37,7 @@ jobs:
         working-directory: FE
         run: node scripts/generate-config.mjs --required
         env:
-          FE_API_BASE_URL: ${{ vars.FE_API_BASE_URL }}
+          FE_API_BASE_URL: ${{ vars.FE_API_BASE_URL || 'https://dance-competition-api.pranalsinghrajput.workers.dev' }}
           FE_RAZORPAY_KEY_ID: ${{ vars.FE_RAZORPAY_KEY_ID }}
 
       - name: Configure GitHub Pages
